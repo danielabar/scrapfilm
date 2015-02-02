@@ -13,21 +13,19 @@ app.get('/scrape', function(req, res) {
       var $ = cheerio.load(html);
       var titles = $('.chart tr td.titleColumn a');
       var years = $('.chart tr td.titleColumn span.secondaryInfo');
-      var data = [];
+      var data = '';
       for (i=0; i<titles.length; i++) {
         var currentTitle = $(titles[i]).text();
         var currentYear = $(years[i]).text();
         var parsedYear = currentYear.replace(/^\(|\)$/g, '');
-        var dataRow = currentTitle + ',' + parsedYear + '\n';
-        fs.appendFile('scraped.csv', dataRow, function (err) {
-          if (err) {
-            console.dir(err);
-          }
-        });
-        data.push(dataRow);
-
+        data += currentTitle + ',' + parsedYear + '\n';
       }
-      res.status(200).send(data);
+      fs.appendFile('scraped.csv', data, function (err) {
+        if (err) {
+          console.dir(err);
+        }
+      });
+      res.status(200).send('scraped.csv saved');
     }
   });
 
