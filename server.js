@@ -15,10 +15,8 @@ app.get('/scrape', function(req, res) {
       var years = $('.chart tr td.titleColumn span.secondaryInfo');
       var data = '';
       for (i=0; i<titles.length; i++) {
-        var currentTitle = $(titles[i]).text();
-        var currentYear = $(years[i]).text();
-        var parsedYear = currentYear.replace(/^\(|\)$/g, '');
-        data += currentTitle + ',' + parsedYear + '\n';
+        var parsedYear = $(years[i]).text().replace(/^\(|\)$/g, '');
+        data += $(titles[i]).text() + ',' + parsedYear + '\n';
       }
       fs.writeFile('scraped.csv', data, function (err) {
         if (err) {
