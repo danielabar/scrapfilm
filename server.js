@@ -20,17 +20,18 @@ app.get('/scrape', function(req, res) {
         var parsedYear = currentYear.replace(/^\(|\)$/g, '');
         data += currentTitle + ',' + parsedYear + '\n';
       }
-      fs.appendFile('scraped.csv', data, function (err) {
+      fs.writeFile('scraped.csv', data, function (err) {
         if (err) {
-          console.dir(err);
+          res.status(500).send(err);
+        } else {
+          var msg = 'Your file is saved at ' + __dirname + '/scraped.csv';
+          res.status(200).send('<h2>' + msg +'</h2>');
         }
       });
-      res.status(200).send('scraped.csv saved');
     }
   });
-
 });
 
 app.listen('8001');
-console.log('listening on 8001');
+console.log('browse to http://localhost:8001/scraped');
 exports = module.exports = app;
